@@ -1,0 +1,26 @@
+{
+  "name": "movies-api",
+  "version": "1.0.0",
+  "description": "API to study and learn Node.Js, docker-compose and MongoDb",
+  "main": "src/index.js",
+  "author": "Gabriel Santana",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/santanagbr/movies-api.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "build-docker-image": "docker build -t movies api .",
+    "docker:up": "docker-compose up"
+  },
+  "homepage": "https://github.com/santanagbr/movies-api#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "http-status-codes": "^1.4.0",
+    "lodash": "^4.17.15",
+    "mongodb": "^3.5.9"
+  }
+}
