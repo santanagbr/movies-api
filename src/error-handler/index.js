@@ -1,11 +1,19 @@
 const httpStatusCode = require('http-status-codes');
+const BaseError = require('./BaseError');
 
 const errors = {
-  duplicatedMovie: {
-    code: 1,
-    statusCode: httpStatusCode.CONFLICT,
-    error: new Error('Duplicated films are not allowed.')
-  },
+  movies: {
+    duplicated: () => new BaseError({
+      code: 'DPLC01',
+      statusCode: httpStatusCode.CONFLICT,
+      message: 'Duplicated films are not allowed.'
+    }),
+    notFound: () => new BaseError({
+      code: 'NTFD01',
+      statusCode: httpStatusCode.NOT_FOUND,
+      message: 'Movie(s) not found.'
+    })
+  }
 };
 
 module.exports = errors;

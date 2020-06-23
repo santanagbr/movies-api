@@ -6,20 +6,30 @@ class MovieController {
   }
 
   async get(req, res) {
-    const movies = await this.service.get();
-
-    res.status(httpStatusCode.OK);
-    res.send(movies);
-    res.end();
+    try {
+      const movies = await this.service.get();
+  
+      res.status(httpStatusCode.OK);
+      res.send(movies);
+      res.end();
+    } catch (err) {
+      res.status(err.statusCode);
+      res.send({ message: err.message });
+    }
   }
 
   async post(req, res) {
-    const movies = req.body;
+    try {
+      const movies = req.body;
 
-    await this.service.post(movies);
+      await this.service.post(movies);
 
-    res.status(httpStatusCode.OK);
-    res.end();
+      res.status(httpStatusCode.OK);
+      res.end();
+    } catch (err) {
+      res.status(err.statusCode);
+      res.send({ message: err.message });
+    }
   }
 }
 

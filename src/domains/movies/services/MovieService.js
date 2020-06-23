@@ -1,5 +1,5 @@
 const { uniqBy } = require('lodash');
-const { duplicatedMovie } = require('../../../error-handler')
+const errors = require('../../../error-handler')
 
 class MovieService {
   constructor({ repository }) {
@@ -7,20 +7,20 @@ class MovieService {
   }
 
   async get(filters = {}) {
-    return this.repository.get();
+    const movies = await this.repository.get();
+
+    if(!movies.length) {
+      throw errors.movies.notFound()
+    }
   }
 
   async post(movies) {
-    try {
-      const uniqueMovies = await this.removeDuplicated(movies);
-      if(!uniqueMovies.length) {
-        throw duplicatedMovie.error
-      };
+    const uniqueMovies = await this.removeDuplicated(movies);
+    if(!uniqueMovies.length) {
+      throw errors.movies.duplicated()
+    };
 
-      await this.repository.post(uniqueMovies);
-    } catch (err) {
-      console.error(`Error to post movies: ${err.message}`);
-    }
+    await this.repository.post(uniqueMovies);
   }
 
   async removeDuplicated(movies) {
