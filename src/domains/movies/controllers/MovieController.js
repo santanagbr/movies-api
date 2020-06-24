@@ -1,5 +1,7 @@
 const httpStatusCode = require('http-status-codes');
 
+const errorLauncher = require('../../../error-handler/ErrorLauncher');
+
 class MovieController {
   constructor({ service }) {
     this.service = service
@@ -7,14 +9,13 @@ class MovieController {
 
   async get(req, res) {
     try {
-      const movies = await this.service.get();
+      const movies = await this.service.get(req.query);
   
       res.status(httpStatusCode.OK);
       res.send(movies);
       res.end();
     } catch (err) {
-      res.status(err.statusCode);
-      res.send({ message: err.message });
+      errorLauncher(res, err);
     }
   }
 
@@ -27,8 +28,7 @@ class MovieController {
       res.status(httpStatusCode.OK);
       res.end();
     } catch (err) {
-      res.status(err.statusCode);
-      res.send({ message: err.message });
+      errorLauncher(res, err);
     }
   }
 }

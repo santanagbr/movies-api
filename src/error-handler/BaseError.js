@@ -4,13 +4,13 @@ class BaseError extends Error {
   constructor({
     code,
     statusCode = httpStatusCode.INTERNAL_SERVER_ERROR,
-    message = 'Internal Server Error.',
+    messages = 'Internal Server Error.',
   }) {
-    super(message)
+    super(messages)
 
     this.code = code,
     this.statusCode = statusCode,
-    this.message = message
+    this.messages = messages
   }
 }
 

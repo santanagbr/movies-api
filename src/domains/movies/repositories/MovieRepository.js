@@ -1,33 +1,46 @@
 const { MongoClient } = require('mongodb');
+
+const errors = require('../../../error-handler/errors');
 const mongoURI = require('../../../../configs/database');
 
-const database = 'movie-store'
-async function getMongoConnection() {
-  return MongoClient.connect(mongoURI.url);
-}
-
-// function closeMongoConnection() {}
-
 class MovieRepository {
-  constructor(){
-    this.collection = 'movies'
-  }
+  constructor() {
+    this.database = 'movie-store';
+    this.collection = 'movies';
+  };
 
   async get(filters = {}) {
-    const connection = await getMongoConnection();
-    const db = connection.db(database);
+    const connection = await this.getDatabaseConnection();
+    const db = connection.db(this.database);
+    const collection = await db.collection(this.collection);
 
-    const movies = await db.collection(this.collection).find({});
+    const movies = await collection.find(filters).toArray();
 
-    return movies.toArray()
+    await this.closeDatabaseConnection(connection);
+
+    return movies;
   }
 
   async post(movies) {
-    const connection = await getMongoConnection();
-    const db = connection.db(database);
+    const connection = await this.getDatabaseConnection();
+    const db = connection.db(this.database);
 
-    console.log(connection)
     await db.collection(this.collection).insertMany(movies);
+    this.closeDatabaseConnection(connection)
+  }
+
+  async getDatabaseConnection() {
+    try {
+      const databaseConnection = await MongoClient.connect(mongoURI.url);
+  
+      return databaseConnection;
+    } catch (err){
+      throw errors.database.connectionFail()
+    }
+  }
+  
+  async closeDatabaseConnection(connection) {
+    await connection.close();
   }
 }
 
