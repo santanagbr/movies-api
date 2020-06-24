@@ -2,19 +2,22 @@ const MovieRepository = require('../repositories/MovieRepository');
 const MovieService = require('../services/MovieService');
 const MovieController = require('../controllers/MovieController');
 
+const errorLauncher = require('../../../error-handler/ErrorLauncher');
+
 function createMovieRepository() {
   return new MovieRepository();
 }
 
-function createMovieService() {
+function createMovieService(dependencies = {}) {
   return new MovieService({
-    repository: createMovieRepository()
+    repository: dependencies.repository || createMovieRepository()
   });
 }
 
-function createMovieController() {
+function createMovieController(dependencies = {}) {
   return new MovieController ({
-    service: createMovieService(),
+    service: dependencies.service || createMovieService(),
+    errorLauncher: dependencies.errorLauncher || errorLauncher
   })
 };
 

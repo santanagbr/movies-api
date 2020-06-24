@@ -10,7 +10,7 @@ class MovieService {
   async get(filters = {}) {
     const movies = await this.repository.get(filters);
 
-    if(!movies.length) {
+    if (!movies.length) {
       throw errors.movies.notFound()
     }
 
@@ -18,31 +18,34 @@ class MovieService {
   }
 
   async post(movies) {
-    const uniqueMovies = await this.removeDuplicated(movies);
-    if(!uniqueMovies.length) {
+    const uniqueMoviesToSave = await this.removeDuplicated(movies);
+    if(!uniqueMoviesToSave.length) {
       throw errors.movies.duplicated()
     };
 
-    await this.repository.post(uniqueMovies);
+    await this.repository.post(uniqueMoviesToSave);
   }
 
   async removeDuplicated(movies) {
     const savedMovies = await this.repository.get();
+    const savedMoviesNames = savedMovies.map(movie => movie.name);
 
-    const filteredMovies = uniqBy(movies, 'name'); // TODO: remove lodash
+    const moviesToSave = uniqBy(movies, 'name');
 
-    const uniqueMovies = filteredMovies.map((movie) => {
-      if(!savedMovies.length) return movie;
+    const uniqueMoviesToSave = moviesToSave
+      .map(movieToSave => !this.checkMovieExistance(movieToSave.name, savedMoviesNames) ? movieToSave : undefined)
+      .filter(movie => !!movie);
 
-      return savedMovies.find((savedMovie) => {
-        const sanitezedSavedMovieName = this.sanitizeMovieName(savedMovie.name);
-        const sanitezedMovieName = this.sanitizeMovieName(movie.name);
+    return uniqueMoviesToSave;
+  }
+  
+  checkMovieExistance(movieName, savedMoviesNames) {
+    const sanitezedMoviesNames = savedMoviesNames
+      .map(savedMoviesNames => this.sanitizeMovieName(savedMoviesNames));
 
-        return sanitezedMovieName !== sanitezedSavedMovieName
-      })
-    }).filter(filteredMovie => !!filteredMovie);
+    const exists = sanitezedMoviesNames.includes(this.sanitizeMovieName(movieName));
 
-    return uniqueMovies;
+    return exists;
   }
 
   sanitizeMovieName(movieName) {
@@ -50,6 +53,7 @@ class MovieService {
       .replace(/\s/g,'')
       .toLowerCase();
   }
+
 }
 
 module.exports = MovieService;
