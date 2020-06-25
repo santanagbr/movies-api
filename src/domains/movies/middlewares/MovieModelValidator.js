@@ -3,8 +3,28 @@ const moment = require('moment');
 const errorLauncher = require('../../../error-handler/ErrorLauncher');
 const errors = require('../../../error-handler/errors');
 
+function checkMovieProperties(movie, allowedProperties) {
+  const errorsMessages = [];
+
+  const movieValidation = {
+    notAllowedProperties: Object.keys(movie).filter(key => !allowedProperties.includes(key)),
+    missingProperties : allowedProperties.filter(prop => !Object.keys(movie).includes(prop))
+  }
+
+  if (movieValidation.notAllowedProperties.length) {
+    errorsMessages.push(`Properties: [${movieValidation.notAllowedProperties.join(', ')}] are not allowed.`);
+  };
+
+  if (movieValidation.missingProperties.length) {
+    errorsMessages.push(`Missing properties: [${movieValidation.missingProperties.join(', ')}].`);
+  };
+
+  return errorsMessages;
+}
+
 function checkMovieModel(movie) {
   const errorsMessages = [];
+
   const validateFields = {
     name: (movieName) => {
       if (!movieName || typeof movieName !== 'string') {
@@ -13,11 +33,11 @@ function checkMovieModel(movie) {
     },
     cast: (actors) => {
       if (!actors || !Array.isArray(actors) || actors.length > 10) {
-        errorsMessages.push('"cast" must be a list with a maximum of 10 actors.')
+        errorsMessages.push('"cast" must be a list with a maximum of 10 actors.');
       }
       actors.forEach((actor) => {
         if (typeof actor !== 'string') {
-          errorsMessages.push(`${actor} - It\'s an invalid actor name`)
+          errorsMessages.push(`${actor} - It\'s an invalid actor name`);
         }
       })
     },
@@ -38,6 +58,10 @@ function checkMovieModel(movie) {
       }
     }
   }
+
+  const allowedProperties = Object.keys(validateFields);
+  const moviePropertiesErrors = checkMovieProperties(movie, allowedProperties);
+  if (moviePropertiesErrors.length) return moviePropertiesErrors;
 
   Object.keys(movie).forEach(key => validateFields[key](movie[key]));
 

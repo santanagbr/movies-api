@@ -16,7 +16,7 @@ const errors = {
     }),
     invalidModel: (messages) => new BaseError({
       code: 'MOV03',
-      statusCode: httpStatusCode.PRECONDITION_FAILED,
+      statusCode: httpStatusCode.BAD_REQUEST,
       messages,
     })
   },
