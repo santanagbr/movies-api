@@ -2,7 +2,7 @@ const { createMovieService } = require('../../../../../src/domains/movies/factor
 const errors = require('../../../../../src/error-handler/errors');
 const { movies } = require('../../../../../src/error-handler/errors');
 
-describe.only('MovieService', () => {
+describe('MovieService', () => {
   const moviesMock = [
     { 
       name: 'John Wick',
@@ -101,20 +101,21 @@ describe.only('MovieService', () => {
   })
 
   describe('removeDuplicated', async () => {
-    test.only('Should remove duplicated movies', async () => {
+    test('Should remove duplicated movies', async () => {
       const duplicatedMoviesMock = [...moviesMock, ...moviesMock]
       const dependencies = {
         repository: {
-          get: jest.fn().mockResolvedValue(moviesMock)
+          get: jest.fn().mockResolvedValue([])
         },
       };
 
       const movieService = createMovieService(dependencies);
 
-      const moviesWithoutDuplicatedValues = await movieService.removeDuplicated(moviesMock);
+      const moviesWithoutDuplicatedValues = await movieService.removeDuplicated(duplicatedMoviesMock);
 
       expect(moviesWithoutDuplicatedValues).toEqual(moviesMock);
-    })
-    test('Should return [] when movie already exists on DB')
+    });
+
+    test('Should return an empty array when movie already exists on DB')
   })
 });
