@@ -28,4 +28,4 @@ R2: Como é um fluxo simples e sem integrações, os testes funcionais garantem 
 R3: Não há um "fluxo" dentro do sistema para assegurar uma "jornada de usuário" coberta pelo teste e2e. O testes funcionais, caso passem todos, garantem o funcionamento complexo do sistema.
 
 
-Busquei atender os princípios de testes [F.I.R.S.T](https://medium.com/@tasdikrahman/f-i-r-s-t-principles-of-testing-1a497acda8d6), [S.O.L.I.D](https://pt.wikipedia.org/wiki/SOLID) e [Clean Code](https://medium.com/desenvolvendo-com-paixao/1-clean-code-o-que-%C3%A9-porque-usar-1e4f9f4454c6)
+Busquei atender os princípios de [F.I.R.S.T](https://medium.com/@tasdikrahman/f-i-r-s-t-principles-of-testing-1a497acda8d6), [S.O.L.I.D](https://pt.wikipedia.org/wiki/SOLID) e [Clean Code](https://medium.com/desenvolvendo-com-paixao/1-clean-code-o-que-%C3%A9-porque-usar-1e4f9f4454c6)
