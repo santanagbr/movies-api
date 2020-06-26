@@ -3,6 +3,16 @@ const { createMovieController } = require('../../../../../src/domains/movies/fac
 const errors = require('../../../../../src/error-handler/errors');
 
 describe('MovieController', () => {
+  beforeEach(() => {
+    this.dependencies = {
+      service: {
+        get: jest.fn(),
+        post: jest.fn(),
+      },
+      errorLauncher: jest.fn()
+    }
+  });
+
   const moviesMock = [
     { 
       name: 'John Wick',
@@ -21,6 +31,8 @@ describe('MovieController', () => {
 
   describe('get', () => {
     test('Should return movies', async () => {
+      this.dependencies.service.get.mockResolvedValue(moviesMock);
+
       const reqMock = { query: {} };
       const resMock = { 
         status: jest.fn(),
@@ -28,14 +40,9 @@ describe('MovieController', () => {
         end: jest.fn(),
       }
 
-      const dependencies = {
-        service: {
-          get: jest.fn().mockResolvedValue(moviesMock)
-        }
-      }
 
-      const movieController = createMovieController(dependencies);
-      const movies = await movieController.get(reqMock, resMock);
+      const movieController = createMovieController(this.dependencies);
+      await movieController.get(reqMock, resMock);
 
       expect(resMock.status).toHaveBeenCalledWith(200)
       expect(resMock.send).toHaveBeenCalledWith(moviesMock)
@@ -50,14 +57,9 @@ describe('MovieController', () => {
         end: jest.fn(),
       }
 
-      const dependencies = {
-        service: {
-          get: jest.fn().mockRejectedValue(serviceError)
-        },
-        errorLauncher: jest.fn()
-      }
+      this.dependencies.service.get.mockRejectedValue(serviceError)
 
-      const movieController = createMovieController(dependencies);
+      const movieController = createMovieController(this.dependencies);
       
       try {
         await movieController.get(reqMock, resMock);
@@ -78,13 +80,7 @@ describe('MovieController', () => {
         end: jest.fn(),
       }
 
-      const dependencies = {
-        service: {
-          post: jest.fn()
-        }
-      }
-
-      const movieController = createMovieController(dependencies);
+      const movieController = createMovieController(this.dependencies);
 
       await movieController.post(reqMock, resMock);
 
@@ -100,14 +96,9 @@ describe('MovieController', () => {
       }
       
       const serviceError = errors.movies.duplicated();
-      const dependencies = {
-        service: {
-          post: jest.fn().mockRejectedValue(serviceError)
-        },
-        errorLauncher: jest.fn()
-      }
+      this.dependencies.service.post.mockRejectedValue(serviceError)
 
-      const movieController = createMovieController(dependencies);
+      const movieController = createMovieController(this.dependencies);
 
       try {
         await movieController.post(reqMock, resMock);

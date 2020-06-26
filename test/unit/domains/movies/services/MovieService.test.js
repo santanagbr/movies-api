@@ -3,6 +3,15 @@ const errors = require('../../../../../src/error-handler/errors');
 const { movies } = require('../../../../../src/error-handler/errors');
 
 describe('MovieService', () => {
+  beforeEach(() => {
+    this.dependencies = {
+      repository: {
+        get: jest.fn(),
+        post: jest.fn(),
+      },
+    }
+  });
+
   const moviesMock = [
     { 
       name: 'John Wick',
@@ -21,26 +30,18 @@ describe('MovieService', () => {
 
   describe('get', () => {
     test('Should get movies', async () => {
-      const dependencies = {
-        repository: {
-          get: jest.fn().mockResolvedValue(moviesMock)
-        },
-      };
+      this.dependencies.repository.get.mockResolvedValue(moviesMock);
 
-      const movieService = createMovieService(dependencies);
+      const movieService = createMovieService(this.dependencies);
       const movies = await movieService.get();
 
       expect(movies).toEqual(moviesMock);
     });
 
     test('Should throw error if repository don\'t return movies', async () => {
-      const dependencies = {
-        repository: {
-          get: jest.fn().mockResolvedValue([])
-        },
-      };
+      this.dependencies.repository.get.mockResolvedValue([])
 
-      const movieService = createMovieService(dependencies);
+      const movieService = createMovieService(this.dependencies);
 
       let movies = []
       try {
@@ -53,28 +54,16 @@ describe('MovieService', () => {
 
   describe('post', () => {
     test('Should post movies', async () => {
-      const dependencies = {
-        repository: {
-          post: jest.fn()
-        },
-      };
-
-      const movieService = createMovieService(dependencies);
+      const movieService = createMovieService(this.dependencies);
       movieService.removeDuplicated = jest.fn().mockResolvedValue(moviesMock);
 
       await movieService.post(moviesMock)
 
-      expect(dependencies.repository.post).toHaveBeenCalledWith(moviesMock)
+      expect(this.dependencies.repository.post).toHaveBeenCalledWith(moviesMock)
     });
 
     test('Should call method to remove duplicated movies', async () => {
-      const dependencies = {
-        repository: {
-          post: jest.fn()
-        },
-      };
-
-      const movieService = createMovieService(dependencies);
+      const movieService = createMovieService(this.dependencies);
       movieService.removeDuplicated = jest.fn().mockResolvedValue(moviesMock);
 
       await movieService.post(moviesMock)
@@ -83,13 +72,7 @@ describe('MovieService', () => {
     })
   
     test('Should throw error if movies already exists', async () => {
-      const dependencies = {
-        repository: {
-          post: jest.fn()
-        },
-      };
-
-      const movieService = createMovieService(dependencies);
+      const movieService = createMovieService(this.dependencies);
       movieService.removeDuplicated = jest.fn().mockResolvedValue([]);
 
       try {
@@ -103,13 +86,9 @@ describe('MovieService', () => {
   describe('removeDuplicated', async () => {
     test('Should remove duplicated movies', async () => {
       const duplicatedMoviesMock = [...moviesMock, ...moviesMock]
-      const dependencies = {
-        repository: {
-          get: jest.fn().mockResolvedValue([])
-        },
-      };
+      this.dependencies.repository.get.mockResolvedValue([])
 
-      const movieService = createMovieService(dependencies);
+      const movieService = createMovieService(this.dependencies);
 
       const moviesWithoutDuplicatedValues = await movieService.removeDuplicated(duplicatedMoviesMock);
 
