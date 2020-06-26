@@ -10,9 +10,9 @@
     "url": "git+https://github.com/santanagbr/movies-api.git"
   },
   "scripts": {
-    "test": "jest test/unit",
+    "test": "jest test",
     "test:unit": "jest test/unit",
-    "test:integration": "jest test/integration test/zmocks.test.js",
+    "test:functional": "jest test/integration",
     "start": "node src/index.js",
     "build-docker-image": "docker build -t movies-api .",
     "docker:up": "docker-compose up"
