@@ -2,7 +2,8 @@
 
 #### Iniciando a aplicação:
 Execute:
-`npm start:local`
+`npm run build-docker-image`
+`npm run docker:up`
 
 #### Executando testes:
 Todos:

@@ -1,6 +1,14 @@
 version: "2"
 services:
-  database:
+  app:
+    container_name: movies-api
+    restart: always
+    build: .
+    ports:
+      - "3000:3000"
+    links:
+      - mongo
+  mongo:
     image: 'mongo'
     container_name: 'mongo-container'
     ports:
