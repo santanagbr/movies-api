@@ -24,7 +24,7 @@ R: A intenção era passar toda a responsabilidade de validação de modelo ao c
 
 ##### **Porque apenas testes unitários e funcionais?**
 R1: De fato, os testes unitários estão cobrindo apenas as unidades de código. Completamente indispensável.
-R2: Como é um fluxo simples e sem integrações, os testes funcionais garantem as funcionalidades do código (somente duas). Caso uma delas falhe, a única **integração** que existe (que é com o DB) com automaticamente falharia. Cobrindo este cenário.
+R2: Como é um fluxo simples e sem integrações, os testes funcionais garantem as funcionalidades do código (somente duas). Caso uma delas falhe, a única **integração** que existe (que é com o DB) automaticamente falharia. Cobrindo este cenário.
 R3: Não há um "fluxo" dentro do sistema para assegurar uma "jornada de usuário" coberta pelo teste e2e. O testes funcionais, caso passem todos, garantem o funcionamento complexo do sistema.
 
 

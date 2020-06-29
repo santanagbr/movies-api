@@ -83,7 +83,7 @@ describe('MovieService', () => {
     })
   })
 
-  describe('removeDuplicated', async () => {
+  describe('removeDuplicated', () => {
     test('Should remove duplicated movies', async () => {
       const duplicatedMoviesMock = [...moviesMock, ...moviesMock]
       this.dependencies.repository.get.mockResolvedValue([])
@@ -94,7 +94,5 @@ describe('MovieService', () => {
 
       expect(moviesWithoutDuplicatedValues).toEqual(moviesMock);
     });
-
-    test('Should return an empty array when movie already exists on DB')
   })
 });
