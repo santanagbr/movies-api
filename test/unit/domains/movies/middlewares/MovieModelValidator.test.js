@@ -1,5 +1,4 @@
-const validateMoviesModel = require('../../../../src/domains/movies/middlewares/MovieModelValidator');
-const errors = require('../../../../src/error-handler/errors');
+const validateMoviesModel = require('../../../../../src/domains/movies/middlewares/MovieModelValidator');
 
 describe('validateMoviesModel', () => {
   beforeEach(() => {
