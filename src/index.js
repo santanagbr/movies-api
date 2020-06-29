@@ -20,7 +20,7 @@ function healthCheck(req, res) {
 };
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res, next) => healthCheck(req, res));
 app.get('/movies', (req, res) => movieController.get(req, res));
@@ -30,3 +30,5 @@ app.post('/movies',
 );
 
 app.listen(port, () => console.log(`Server listening at http://localhost:${port}`))
+
+module.exports = app;

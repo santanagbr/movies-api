@@ -12,7 +12,7 @@
   "scripts": {
     "test": "jest test",
     "test:unit": "jest test/unit",
-    "test:functional": "jest test/integration",
+    "test:functional": "jest test/functional",
     "start": "node src/index.js",
     "build-docker-image": "docker build -t movies-api .",
     "docker:up": "docker-compose up"
@@ -26,6 +26,7 @@
     "lodash": "^4.17.15",
     "moment": "^2.27.0",
     "mongodb": "^3.5.9",
-    "save": "^2.4.0"
+    "save": "^2.4.0",
+    "supertest": "^4.0.2"
   }
 }
